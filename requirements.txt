@@ -1,0 +1,11 @@
+catkin-pkg==0.3.5
+docutils==0.13.1
+empy==3.3.2
+python-dateutil==2.6.0
+PyYAML==3.12
+rosdistro==0.6.2
+rosinstall-generator==0.1.13
+rospkg==1.1.1
+six==1.10.0
+vcstools==0.1.39
+wstool==0.1.13
