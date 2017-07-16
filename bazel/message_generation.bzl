@@ -24,14 +24,14 @@ def _genmsg_outs(srcs, ros_package_name, extension):
         msg_names.append(item_name)
 
     outs = [
-        join_paths(ros_package_name, 'msg', msg_name + extension)
+        join_paths('msg', msg_name + extension)
         for msg_name in msg_names
     ]
 
     if extension == '.py':
         outs += [
-            join_paths(ros_package_name, 'msg', '__init__.py'),
-            join_paths(ros_package_name, '__init__.py'),
+            join_paths('msg', '__init__.py'),
+            join_paths('__init__.py'),
         ]
 
     return outs
@@ -48,18 +48,6 @@ def _genpy_impl(ctx):
         content='',
     )
 
-    # Generate __init__.py for msg module
-    ctx.action(
-        inputs=ctx.files.srcs,
-        outputs=[ctx.outputs.outs[-2]],
-        executable=ctx.executable._gen_script,
-        arguments=[
-            '--initpy',
-            '-o', outpath,
-            '-p', ctx.attr.ros_package_name,
-        ],
-    )
-
     # Generate the actual messages
     ctx.action(
         inputs=ctx.files.srcs,
@@ -71,7 +59,20 @@ def _genpy_impl(ctx):
         ] + [
             f.path for f in ctx.files.srcs
         ],
-        progress_message='Generating ROS messages',
+    )
+
+    # Generate __init__.py for msg module
+    # NOTE: it looks at the .py files in its output path, so it also
+    # needs to depend on the previous step.
+    ctx.action(
+        inputs=ctx.files.srcs + ctx.outputs.outs[:-2],
+        outputs=[ctx.outputs.outs[-2]],
+        executable=ctx.executable._gen_script,
+        arguments=[
+            '--initpy',
+            '-o', outpath,
+            '-p', ctx.attr.ros_package_name,
+        ],
     )
 
     return struct()
