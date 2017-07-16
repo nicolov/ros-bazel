@@ -1,18 +1,18 @@
 #!/usr/bin/env python
 
-from test_msgs.msg import Message1
+from test_msgs.msg import (
+	Message1,
+	Message2,
+)
 
-# import test_msgs.msg
-
-# print(test_msgs.msg.__path__)
-
-# from test_msgs.msg import Message1
 
 def main():
-    print("Hello world")
+    m1 = Message1()
+    print(m1)
 
-    m = Message1()
-    print(m)
+    m2 = Message2()
+    print(m2)
+
 
 if __name__ == '__main__':
     main()

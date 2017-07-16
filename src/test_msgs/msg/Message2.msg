@@ -1,2 +1,2 @@
-string astr
-msg1   amsg1
+string 	   astr
+Message1   amsg1

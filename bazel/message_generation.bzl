@@ -38,8 +38,10 @@ def _genmsg_outs(srcs, ros_package_name, extension):
 
 
 def _genpy_impl(ctx):
-    # Shell out to the appropriate code generation script from ROS
+    """Implementation for the genpy rule. Shells out to the scripts
+    shipped with genpy."""
 
+    srcpath = ctx.files.srcs[0].dirname
     outpath = ctx.outputs.outs[0].dirname
 
     # Generate __init__.py for package
@@ -56,6 +58,9 @@ def _genpy_impl(ctx):
         arguments=[
             '-o', outpath,
             '-p', ctx.attr.ros_package_name,
+            # Include path for the current package
+            '-I', '%s:%s' % (ctx.attr.ros_package_name, srcpath),
+            # TODO: include paths of dependent packages
         ] + [
             f.path for f in ctx.files.srcs
         ],
@@ -95,14 +100,18 @@ _genpy = rule(
 
 def generate_messages(srcs=None,
                       ros_package_name=None):
+    """ Wraps all message generation functionality. Uses the _genpy
+    and _gencpp to shell out to the code generation scripts, then wraps
+    the resulting files into Python and C++ libraries.
+    We use macros to hide some of the book-keeping of input & output
+    files. """
+
     if not srcs:
         fail('srcs is required (*.msg files).')
     if not ros_package_name:
         fail('ros_package_name is required.')
 
     outs = _genmsg_outs(srcs, ros_package_name, '.py')
-
-    print(outs)
 
     _genpy(
         name='lkfjaklsjfklasd',
