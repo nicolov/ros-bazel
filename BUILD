@@ -17,3 +17,11 @@ py_binary(
         '@ros//:ros_python',
     ],
 )
+
+py_binary(
+    name='genmsg_test',
+    srcs=['src/genmsg_test.py'],
+    deps=[
+        '@genpy_repo//:genpy',
+    ],
+)
