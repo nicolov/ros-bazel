@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
-from msg import Message1
+import test_msgs.msg
+
+print(test_msgs.msg.__path__)
+
+from test_msgs.msg import Message1
 
 def main():
     print("Hello world")

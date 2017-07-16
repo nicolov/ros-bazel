@@ -6,17 +6,14 @@ load('//bazel:path_utils.bzl', 'basename', 'dirname', 'join_paths')
 
 
 def _genmsg_outs(srcs, ros_package_name, extension):
-    """ Given a list of *.msg files, return the generated msg
-    files with a given extension. """
+    """ Given a list of *.msg files, return the expected paths
+    to the generated code with that extension. """
 
     (extension in ['.py', '.h']
         or fail('Unknown extension %s' % extension))
 
-    subdir = dirname(srcs[0])
     msg_names = []
     for item in srcs:
-        if dirname(item) != subdir:
-            fail('Put all .msg files in the same directory')
         if not item.endswith('.msg'):
             fail('%s does not end in .msg' % item)
         item_name = basename(item)[:-len('.msg')]
@@ -27,9 +24,15 @@ def _genmsg_outs(srcs, ros_package_name, extension):
         msg_names.append(item_name)
 
     outs = [
-        join_paths(subdir, msg_name + extension)
+        join_paths(ros_package_name, 'msg', msg_name + extension)
         for msg_name in msg_names
     ]
+
+    if extension == '.py':
+        outs += [
+            join_paths(ros_package_name, 'msg', '__init__.py'),
+            join_paths(ros_package_name, '__init__.py'),
+        ]
 
     return outs
 
@@ -39,10 +42,16 @@ def _genpy_impl(ctx):
 
     outpath = ctx.outputs.outs[0].dirname
 
+    # Generate __init__.py for package
+    ctx.file_action(
+        output=ctx.outputs.outs[-1],
+        content='',
+    )
+
     # Generate __init__.py for msg module
     ctx.action(
         inputs=ctx.files.srcs,
-        outputs=ctx.outputs.out_init,
+        outputs=[ctx.outputs.outs[-2]],
         executable=ctx.executable._gen_script,
         arguments=[
             '--initpy',
@@ -54,7 +63,7 @@ def _genpy_impl(ctx):
     # Generate the actual messages
     ctx.action(
         inputs=ctx.files.srcs,
-        outputs=ctx.outputs.outs,
+        outputs=ctx.outputs.outs[:-2],
         executable=ctx.executable._gen_script,
         arguments=[
             '-o', outpath,
@@ -79,7 +88,6 @@ _genpy = rule(
             executable=True,
             cfg='host'),
         'outs': attr.output_list(),
-        'out_init': attr.output_list(),
     },
 )
 
@@ -92,8 +100,6 @@ def generate_messages(srcs=None,
         fail('ros_package_name is required.')
 
     outs = _genmsg_outs(srcs, ros_package_name, '.py')
-    # TODO: make this nicer
-    out_init = [join_paths(dirname(srcs[0]), '__init__.py')]
 
     print(outs)
 
@@ -102,10 +108,10 @@ def generate_messages(srcs=None,
         srcs=srcs,
         ros_package_name=ros_package_name,
         outs=outs,
-        out_init=out_init,
     )
 
     native.py_library(
         name='msgs_py',
-        srcs=outs + out_init,
+        srcs=outs,
+        imports=['.'],
     )
