@@ -1,15 +1,6 @@
 load('//bazel:message_generation.bzl', 'generate_messages')
 
-# genrule(
-#     name='msgs',
-#     srcs=glob(['msg/*.msg']),
-#     outs=[
-#         'sample.txt',
-#     ],
-#     cmd='$(location @genpy//:genmsg_py) > $@',
-#     tools=['@genpy//:genmsg_py'],
-# )
-
+# Implicitly creates a msgs_py target in the current scope
 generate_messages(
     srcs=glob(['msg/Message1.msg']),
     ros_package_name='pkg_with_msg',
@@ -22,5 +13,3 @@ py_binary(
         ':msgs_py',
     ],
 )
-
-# load("//third_party/py:python_configure.bzl", "python_configure")

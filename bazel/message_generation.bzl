@@ -20,14 +20,16 @@ def _genmsg_outs(srcs, ros_package_name, extension):
         if not item.endswith('.msg'):
             fail('%s does not end in .msg' % item)
         item_name = basename(item)[:-len('.msg')]
+
+        if extension == '.py':
+            item_name = '_' + item_name
+
         msg_names.append(item_name)
 
     outs = [
         join_paths(subdir, msg_name + extension)
         for msg_name in msg_names
     ]
-
-    print(outs)
 
     return outs
 
@@ -37,6 +39,19 @@ def _genpy_impl(ctx):
 
     outpath = ctx.outputs.outs[0].dirname
 
+    # Generate __init__.py for msg module
+    ctx.action(
+        inputs=ctx.files.srcs,
+        outputs=ctx.outputs.out_init,
+        executable=ctx.executable._gen_script,
+        arguments=[
+            '--initpy',
+            '-o', outpath,
+            '-p', ctx.attr.ros_package_name,
+        ],
+    )
+
+    # Generate the actual messages
     ctx.action(
         inputs=ctx.files.srcs,
         outputs=ctx.outputs.outs,
@@ -64,6 +79,7 @@ _genpy = rule(
             executable=True,
             cfg='host'),
         'outs': attr.output_list(),
+        'out_init': attr.output_list(),
     },
 )
 
@@ -76,33 +92,20 @@ def generate_messages(srcs=None,
         fail('ros_package_name is required.')
 
     outs = _genmsg_outs(srcs, ros_package_name, '.py')
+    # TODO: make this nicer
+    out_init = [join_paths(dirname(srcs[0]), '__init__.py')]
+
+    print(outs)
+
     _genpy(
         name='lkfjaklsjfklasd',
         srcs=srcs,
         ros_package_name=ros_package_name,
-        outs=outs
+        outs=outs,
+        out_init=out_init,
     )
 
     native.py_library(
         name='msgs_py',
-        srcs=outs
+        srcs=outs + out_init,
     )
-
-# def generate_messages(srcs):
-#     # Generate python
-#     s = srcs[0]
-
-#     native.genrule(
-#         name='genpy_2',
-#         srcs=[s],
-#         outs=['__init__.py'],
-#         cmd='$(location @genpy//:genmsg_py) --initpy -p my_pkg -o $(@D) $(location ' + s + ') && tree $(@D)',
-#         tools=[
-#             '@genpy//:genmsg_py',
-#         ],
-#     )
-
-#     native.py_library(
-#         name='msgs_py',
-#         srcs=['__init__.py']
-#     )
