@@ -10,16 +10,17 @@ load('//bazel:message_generation.bzl', 'generate_messages')
 #     tools=['@genpy//:genmsg_py'],
 # )
 
-# generate_messages(
-#     srcs=glob(['msg/*.msg']),
-# )
+generate_messages(
+    srcs=glob(['msg/Message1.msg']),
+    ros_package_name='pkg_with_msg',
+)
 
-# py_binary(
-#     name='main',
-#     srcs=['scripts/main.py'],
-#     deps=[
-#         ':msgs_py',
-#     ],
-# )
+py_binary(
+    name='main',
+    srcs=['scripts/main.py'],
+    deps=[
+        ':msgs_py',
+    ],
+)
 
 # load("//third_party/py:python_configure.bzl", "python_configure")
