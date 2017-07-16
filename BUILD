@@ -22,6 +22,6 @@ py_binary(
     name='genmsg_test',
     srcs=['src/genmsg_test.py'],
     deps=[
-        '@genmsg',
+        '@genpy_repo//:genpy',
     ],
 )

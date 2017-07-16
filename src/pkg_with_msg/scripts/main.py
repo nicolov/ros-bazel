@@ -1,12 +1,9 @@
 #!/usr/bin/env python
 
-import os
-import genpy
-
-import genpy.generator
 
 def main():
-	pass
+    print("Hello world")
+
 
 if __name__ == '__main__':
-	main()
+    main()

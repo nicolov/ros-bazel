@@ -1,8 +1,7 @@
+package(default_visibility = ["//visibility:public"])
+
 py_library(
     name='genmsg',
-    srcs=glob(
-        ['src/genmsg/*.py']
-    ),
-    imports=['scrc/genmsg/'],
-    visibility = ['//visibility:public'],
+    srcs=glob(['src/**/*.py']),
+    imports=['src'],
 )
