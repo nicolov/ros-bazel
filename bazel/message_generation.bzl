@@ -24,14 +24,14 @@ def _genmsg_outs(srcs, ros_package_name, extension):
         msg_names.append(item_name)
 
     outs = [
-        join_paths('msg', msg_name + extension)
+        join_paths(ros_package_name, 'msg', msg_name + extension)
         for msg_name in msg_names
     ]
 
     if extension == '.py':
         outs += [
-            join_paths('msg', '__init__.py'),
-            join_paths('__init__.py'),
+            join_paths(ros_package_name, 'msg', '__init__.py'),
+            join_paths(ros_package_name, '__init__.py'),
         ]
 
     return outs

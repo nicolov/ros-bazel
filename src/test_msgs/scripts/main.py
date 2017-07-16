@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import msg.Message1
+from test_msgs.msg import Message1
 
 # import test_msgs.msg
 
