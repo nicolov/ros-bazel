@@ -115,4 +115,7 @@ def generate_messages(srcs=None,
         name='msgs_py',
         srcs=outs,
         imports=['.'],
+        deps=[
+            '@genpy_repo//:genpy'
+        ],
     )
