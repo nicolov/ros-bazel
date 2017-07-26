@@ -1,0 +1,7 @@
+version: '3'
+services:
+  bazeler:
+    build: .
+    volumes:
+    - .:/src
+    working_dir: /src
