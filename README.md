@@ -24,9 +24,9 @@ and Python libraries in the `@ros` repository. Two simple examples live in the
 
 ## Testing
 
-Install Python dependencies (preferably in a virtualenv):
+Get a shell in the docker environment:
 
-    pip install -r requirements.txt
+    docker-compose build && docker-compose run bazeler bash
 
 Download and compile the ROS workspace using `catkin`:
 
