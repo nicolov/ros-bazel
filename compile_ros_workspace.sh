@@ -12,8 +12,9 @@ rosinstall_generator \
     --deps \
     --tar \
     --flat \
+    --rosdistro melodic \
     $PACKAGES > ws.rosinstall
-wstool init -j1 src ws.rosinstall
+wstool init -j8 src ws.rosinstall
 
 catkin config \
     --install \
