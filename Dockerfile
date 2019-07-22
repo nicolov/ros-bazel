@@ -1,14 +1,5 @@
-FROM ubuntu:trusty
+FROM ubuntu:bionic
 ENV DEBIAN_FRONTEND noninteractive
-
-# Python
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        python2.7 \
-        python-pip
-
-COPY requirements.txt /src/requirements.txt
-RUN pip install -r /src/requirements.txt
 
 # Development
 RUN apt-get update \
@@ -20,18 +11,25 @@ RUN apt-get update \
         git \
         vim
 
+# Python
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        python \
+        unzip \
+        zip
+
+# Pip
+RUN curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py \
+    && python /tmp/get-pip.py
+
+COPY requirements.txt /src/requirements.txt
+RUN pip install -r /src/requirements.txt
+
 # Bazel
-RUN apt-get install -y --no-install-recommends \
-        software-properties-common \
-    && apt-add-repository ppa:webupd8team/java --yes \
-    && echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections \
-    && echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list \
-    && curl https://bazel.build/bazel-release.pub.gpg | sudo apt-key add - \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends \
-        oracle-java8-installer \
-    && apt-get install -y --no-install-recommends \
-        bazel \
+RUN curl -L -o /tmp/bazel-installer https://github.com/bazelbuild/bazel/releases/download/0.28.0/bazel-0.28.0-installer-linux-x86_64.sh \
+    && chmod +x /tmp/bazel-installer \
+    && /tmp/bazel-installer \
+    && rm /tmp/bazel-installer \
     && bazel --batch version
 
 # ROS dependencies
@@ -39,4 +37,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         libboost-all-dev \
         libconsole-bridge-dev \
-        libtinyxml-dev
+        liblog4cxx-dev \
+        libgtest-dev \
+        libtinyxml-dev \
+        libtinyxml2-dev
