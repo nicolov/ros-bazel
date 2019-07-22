@@ -1,6 +1,7 @@
 # -*- python -*-
-
 workspace(name='ros_example')
+
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 # Prebuilt ROS workspace
 
@@ -19,17 +20,17 @@ new_local_repository(
     build_file='roslz4.BUILD'
 )
 
-new_http_archive(
+http_archive(
     name='genmsg_repo',
-    build_file='bazel/genmsg.BUILD',
+    build_file='@//bazel:genmsg.BUILD',
     sha256='d7627a2df169e4e8208347d9215e47c723a015b67ef3ed8cda8b61b6cfbf94d2',
     urls = ['https://github.com/ros/genmsg/archive/0.5.8.tar.gz'],
     strip_prefix='genmsg-0.5.8',
 )
 
-new_http_archive(
+http_archive(
     name='genpy_repo',
-    build_file='bazel/genpy.BUILD',
+    build_file='@//bazel:genpy.BUILD',
     sha256='35e5cd2032f52a1f77190df5c31c02134dc460bfeda3f28b5a860a95309342b9',
     urls = ['https://github.com/ros/genpy/archive/0.6.5.tar.gz'],
     strip_prefix='genpy-0.6.5',
