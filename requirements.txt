@@ -17,7 +17,7 @@ rosinstall-generator==0.1.13
 rospkg==1.1.1
 six==1.10.0
 trollius==2.1
-urllib3==1.7.1
+urllib3==1.24.2
 vcstools==0.1.39
 wsgiref==0.1.2
 wstool==0.1.13
