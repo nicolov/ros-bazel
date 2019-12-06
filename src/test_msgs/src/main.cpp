@@ -1,5 +1,5 @@
-#include "src/test_msgs/test_msgs/Message1.h"
-#include "src/test_msgs/test_msgs/Message2.h"
+#include "test_msgs/Message1.h"
+#include "test_msgs/Message2.h"
 
 #include <iostream>
 
