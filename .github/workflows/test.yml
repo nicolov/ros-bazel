@@ -9,7 +9,7 @@ jobs:
 
         # And this is our custom Docker image
         container:
-            image: nicolov/ros-bazel:0.0.1
+            image: nicolov/ros-bazel:0.0.2
 
         steps:
             - uses: actions/checkout@v1

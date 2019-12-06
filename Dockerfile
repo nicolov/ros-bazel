@@ -46,4 +46,6 @@ RUN apt-get update \
         libtinyxml-dev \
         libtinyxml2-dev \
         python-catkin-tools \
-        python-rosinstall-generator
+        python-empy \
+        python-rosinstall-generator \
+        python-wstool
