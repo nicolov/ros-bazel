@@ -11,7 +11,7 @@ html5lib==0.999
 nose==1.3.7
 osrf-pycommon==0.1.3
 python-dateutil==2.6.0
-requests==2.2.1
+requests==2.20.0
 rosdistro==0.6.2
 rosinstall-generator==0.1.13
 rospkg==1.1.1
