@@ -1,4 +1,4 @@
-PyYAML==3.12
+PyYAML==5.1
 argparse==1.2.1
 catkin-pkg==0.4.12
 catkin-tools==0.4.4
