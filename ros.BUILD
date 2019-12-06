@@ -4,6 +4,7 @@ package(default_visibility = ["//visibility:public"])
 
 # Prebuilt C++ and Python ROS libraries
 
+# TODO: change `ros` -> `ros_cpp`?
 cc_library(
     name='ros',
     srcs=glob(['lib/*.so']),
