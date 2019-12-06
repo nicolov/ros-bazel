@@ -10,15 +10,10 @@ git_repository(
     commit = "38f86fb55b698c51e8510c807489c9f4e047480e",
     remote = "https://github.com/bazelbuild/rules_python.git",
 )
-
 load("@rules_python//python:repositories.bzl", "py_repositories")
-
 py_repositories()
-
 load("@rules_python//python:pip.bzl", "pip_repositories")
-
 pip_repositories()
-
 load("@rules_python//python:pip.bzl", "pip3_import")
 
 # Create a central repo that knows about the dependencies needed for
@@ -31,11 +26,9 @@ pip3_import(
 # Load the central repo's install function from its `//:requirements.bzl` file,
 # and call it.
 load("@pypi_deps//:requirements.bzl", "pip_install")
-
 pip_install()
 
 # Prebuilt ROS workspace
-
 new_local_repository(
     name = "ros",
     build_file = "ros.BUILD",

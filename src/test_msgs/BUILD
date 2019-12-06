@@ -1,9 +1,9 @@
-load("//bazel:message_generation.bzl", "generate_messages")
+load('//bazel:message_generation.bzl', 'generate_messages')
 
 # Implicitly creates msgs_py and msg_cc targets in the current scope
 generate_messages(
-    srcs = glob(["msg/*.msg"]),
-    ros_package_name = "test_msgs",
+    srcs=glob(['msg/*.msg']),
+    ros_package_name='test_msgs',
 )
 
 py_binary(
