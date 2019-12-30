@@ -1,7 +1,5 @@
 package(default_visibility = ["//visibility:public"])
 
-load("@pypi_deps//:requirements.bzl", "requirement")
-
 py_library(
     name = "gencpp",
     srcs = glob(["src/**/*.py"]),
@@ -16,6 +14,5 @@ py_binary(
     srcs = ["scripts/gen_cpp.py"],
     deps = [
         ":gencpp",
-        requirement("empy"),
     ],
 )

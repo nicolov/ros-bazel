@@ -4,30 +4,6 @@ workspace(name = "ros_example")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
-# Pip requirements
-git_repository(
-    name = "rules_python",
-    commit = "38f86fb55b698c51e8510c807489c9f4e047480e",
-    remote = "https://github.com/bazelbuild/rules_python.git",
-)
-load("@rules_python//python:repositories.bzl", "py_repositories")
-py_repositories()
-load("@rules_python//python:pip.bzl", "pip_repositories")
-pip_repositories()
-load("@rules_python//python:pip.bzl", "pip3_import")
-
-# Create a central repo that knows about the dependencies needed for
-# requirements.txt.
-pip3_import(
-    name = "pypi_deps",
-    requirements = "//:requirements.txt",
-)
-
-# Load the central repo's install function from its `//:requirements.bzl` file,
-# and call it.
-load("@pypi_deps//:requirements.bzl", "pip_install")
-pip_install()
-
 # Prebuilt ROS workspace
 new_local_repository(
     name = "ros",
