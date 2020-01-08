@@ -2,6 +2,9 @@
 
 set -e
 
+# Use the system ROS version, or melodic if there is no system version
+ROSDISTRO="${ROSDISTRO:-melodic}"
+
 PACKAGES="roscpp rospy"
 
 rm -rf bundle_ws
@@ -12,7 +15,6 @@ rosinstall_generator \
     --deps \
     --tar \
     --flat \
-    --rosdistro melodic \
     $PACKAGES > ws.rosinstall
 wstool init -j8 src ws.rosinstall
 
