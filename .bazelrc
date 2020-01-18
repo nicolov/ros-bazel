@@ -1,1 +1,2 @@
-build --subcommands
+# Make sure that code generation runs under Python 2
+build --host_force_python=PY2
