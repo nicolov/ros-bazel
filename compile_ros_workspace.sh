@@ -15,6 +15,7 @@ rosinstall_generator \
     --deps \
     --tar \
     --flat \
+    --rosdistro="${ROSDISTRO}" \
     $PACKAGES > ws.rosinstall
 wstool init -j8 src ws.rosinstall
 
