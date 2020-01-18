@@ -106,10 +106,6 @@ def _gencpp_impl(ctx):
     srcpath = ctx.files.srcs[0].dirname
     outpath = ctx.outputs.outs[0].dirname
 
-    # TODO: deleteme
-    print("SRCPATH is:" + srcpath)
-    print("ctx.attr.ros_package_name: " + ctx.attr.ros_package_name)
-
     # Generate the actual messages
     for i in range(0, len(ctx.files.srcs)):
         msg_file = ctx.files.srcs[i]
@@ -167,7 +163,7 @@ def generate_messages(srcs = None, ros_package_name = None):
     gencpp_outs = _genmsg_outs(srcs, ros_package_name, ".h")
 
     _genpy(
-        name='lkfjaklsjfklasd',
+        name='_gen_msgs_py',
         srcs=srcs,
         ros_package_name=ros_package_name,
         outs = genpy_outs,
@@ -183,7 +179,7 @@ def generate_messages(srcs = None, ros_package_name = None):
     )
 
     _gencpp(
-        name = "kldajfaowijdafdvgqwe",
+        name = "_gen_msgs_cc",
         srcs = srcs,
         ros_package_name = ros_package_name,
         outs = gencpp_outs,
