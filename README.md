@@ -8,30 +8,46 @@ It proved really fast on some of the [benchmarks I
 ran](http://nicolovaligi.com/benchmark-bazel-build-cpp.html), so I decided to
 try using it to build ROS packages.
 
-## How it works
+Since converting the whole ROS build to Bazel is quite a lot of work (albeit
+highly recommended for larger teams), this project takes a different route
+and imports a prebuilt ROS environment (likely installed using apt and the
+default instructions). This gets you the best of both worlds: your code builds
+and tests using Bazel, and there's no overhead in maintaining Bazel builds of
+the whole ROS ecosystem.
 
-First, we use `catkin` to build the base set of ROS packages we need for a
-simple node (`roscpp`, `rospy`, ..). Then, we can expose the resulting install
-space to Bazel using the `new_local_repository` repository rule in the
-`WORKSPACE` file. Bazel will then use the `ros.BUILD` file to understand the
-contents of the catkin install space. For now, we just declare all `.so` files
-as a single prebuilt C++ library, and all the Python code as a single Python
-package.
+It's even possible to import other catkin packages outside of the default
+ROS binary distribution.
 
-With this setup in place, Bazel-native binaries just need to depend on the C++
-and Python libraries in the `@ros` repository. Two simple examples live in the
-`src` directory.
+# Status
 
-## Testing
+- [x] Import C++ libraries like `roscpp`, etc..
+- [x] Code generation for messages, both C++ and Python
+- [x] Depend on Bazel-generated messages
+- [x] Bazel caching and sandboxing ready
+- [ ] ROS Python libraries are not imported into Bazel. Python is generally quite messy in Bazel anyhow.
+- [ ] Integration with `rospack`, `roslaunch`, and generally anything that crawls the
+      filesystem at runtime. Bazel-built binaries will probably just not be found by such tools.
+- [ ] Actions, services, `dynamic_reconfigure` and probably other less-known message-based stuff.
+
+This code is not supported in any way, and probably not recommended for
+production use.  I just wanted to see if there was an easier way to onboard ROS
+teams to Bazel without having to maintain a whole separate build system for
+ROS.
+
+## Try it out
 
 Get a shell in the docker environment:
 
     docker-compose build && docker-compose run bazeler bash
 
-Download and compile the ROS workspace using `catkin`:
+Start a talker node with custom messages:
 
-    ./compile_ros_workspace.py
+    bazel run //src/talker
 
-Build the Bazel workspace:
+## How it works
 
-    bazel build //... -s
+It uses a Bazel [repository
+rule](https://docs.bazel.build/versions/master/skylark/repository_rules.html)
+to parse the ROS installation under `/opt/ros/melodic` and produce Bazel BUILD
+files and repositories. For example, `roscpp` becomes a `@roscpp` Bazel target
+that add the correct link and compile flags.
