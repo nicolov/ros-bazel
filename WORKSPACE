@@ -1,24 +1,21 @@
 # -*- python -*-
 workspace(name = "ros_example")
 
+load("//bazel:repository_rules.bzl", "import_ros_workspace")
+
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
-# Prebuilt ROS workspace
-new_local_repository(
-    name = "ros",
-    build_file = "ros.BUILD",
-    path = "bundle_ws/install",
+import_ros_workspace(
+    name = "ros_ws",
+    path = "/opt/ros/melodic",
 )
 
-# Other catkin packages from source
-# TODO: generate this automatically from rosinstall_generator
+load("@ros_ws//:workspace.bzl", "ros_repositories")
 
-new_local_repository(
-    name = "roslz4",
-    build_file = "roslz4.BUILD",
-    path = "ros_comm/utilities/roslz4",
-)
+ros_repositories()
+
+# Packages needed for code generation that we want to import from source.
 
 http_archive(
     name = "genmsg_repo",

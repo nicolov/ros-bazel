@@ -26,7 +26,7 @@ RUN curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py \
     && python /tmp/get-pip.py
 
 # Bazel
-RUN curl -L -o /tmp/bazel-installer https://github.com/bazelbuild/bazel/releases/download/0.28.0/bazel-0.28.0-installer-linux-x86_64.sh \
+RUN curl -L -o /tmp/bazel-installer https://github.com/bazelbuild/bazel/releases/download/2.0.0/bazel-2.0.0-installer-linux-x86_64.sh \
     && chmod +x /tmp/bazel-installer \
     && /tmp/bazel-installer \
     && rm /tmp/bazel-installer \
@@ -48,4 +48,5 @@ RUN apt-get update \
         python-catkin-tools \
         python-empy \
         python-rosinstall-generator \
-        python-wstool
+        python-wstool \
+        ros-melodic-ros-base

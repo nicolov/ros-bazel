@@ -9,14 +9,10 @@ jobs:
 
         # And this is our custom Docker image
         container:
-            image: nicolov/ros-bazel:0.0.2
+            image: nicolov/ros-bazel:0.0.3
 
         steps:
             - uses: actions/checkout@v1
-            - name: compile ROS workspace
-              run: |
-                  ./compile_ros_workspace.sh
-            
             - name: build bazel
               run: |
                   bazel build //...
